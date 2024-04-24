@@ -17,9 +17,11 @@ public class Chat {
     @Id
     @Column(name="chat_id")
     private String chat_id;
-    @Column(name="c_id")
-    private String c_id;
     @Column(name="user_id")
     private String user_id;
+    @Column(name="c_id")
+    private String c_id;
     private String chat;
+    @Column(name="upper_id")
+    private String upper_id;
 }

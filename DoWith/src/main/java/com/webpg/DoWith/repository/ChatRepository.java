@@ -1,6 +1,6 @@
 package com.webpg.DoWith.repository;
 
-import com.webpg.DoWith.dto.ChallengeListInterface;
+import com.webpg.DoWith.dto.ChatListInterface;
 import com.webpg.DoWith.entity.Chat;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -18,4 +18,13 @@ public interface ChatRepository extends JpaRepository<Chat, String> {
     @Query(value="INSERT INTO chat(chat_id, c_id, user_id, chat) " +
                  "VALUES(TO_CHAR(SYSDATE, 'YYMMDDHH24MISS'), :c_id, :user_id, :chat)",nativeQuery=true)
     public void addChat(@Param("c_id") String c_id, @Param("user_id") String user_id, @Param("chat") String chat);
+
+    @Query(value = "SELECT c.*, u.nickname " +
+            "FROM chat c " +
+            "JOIN users u ON c.user_id = u.user_id " +
+            "WHERE c.c_id = :c_id " +
+            "START WITH c.upper_id IS NULL " +
+            "CONNECT BY PRIOR c.chat_id = c.upper_id " +
+            "ORDER SIBLINGS BY 1", nativeQuery = true)
+    public List<ChatListInterface> getChatList(String cId);
 }

@@ -30,9 +30,12 @@ CREATE TABLE member(
     PRIMARY KEY (user_id, c_id)
 );
 
+DROP TABLE chat;
+
 CREATE TABLE chat(
     chat_id VARCHAR(50) PRIMARY KEY,
     c_id VARCHAR2(50) REFERENCES challenge(c_id),
     user_id VARCHAR(50) REFERENCES users(user_id),
-    chat VARCHAR(3000)
+    chat VARCHAR(3000),
+    upper_id VARCHAR(50) REFERENCES chat(chat_id)
 );
