@@ -33,7 +33,8 @@ public class UserService {
     public Map<String, Object> login(RequestLogin request) {
         Users tmp = usersRepository.findById(request.getUser_id()).orElse(null);
         Map<String, Object> map = new HashMap<>();
-        if (tmp != null) {
+        System.out.println(request.getUser_id() + request.getPasswd());
+        if (tmp != null && tmp.getPasswd().equals(request.getPasswd())) {
             map.put("user_id", request.getUser_id());
             map.put("nickname", tmp.getNickname());
         } else map.put("nickname", null);

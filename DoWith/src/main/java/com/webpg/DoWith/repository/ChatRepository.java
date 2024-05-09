@@ -26,5 +26,5 @@ public interface ChatRepository extends JpaRepository<Chat, String> {
             "START WITH c.upper_id IS NULL " +
             "CONNECT BY PRIOR c.chat_id = c.upper_id " +
             "ORDER SIBLINGS BY 1", nativeQuery = true)
-    public List<ChatListInterface> getChatList(String cId);
+    public List<ChatListInterface> getChatList(@Param("c_id") String c_id);
 }

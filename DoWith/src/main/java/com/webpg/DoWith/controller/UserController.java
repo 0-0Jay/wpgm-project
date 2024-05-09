@@ -22,14 +22,14 @@ public class UserController {
     @PostMapping("/join")
     public ResponseEntity<String> join(@RequestBody UserDto userDto) {
         String result = userService.join(userDto);
-        HttpStatus status = (result.equals("OK"))? HttpStatus.CREATED:HttpStatus.BAD_REQUEST;
+        HttpStatus status = (result.equals("OK"))? HttpStatus.OK:HttpStatus.BAD_REQUEST;
         return ResponseEntity.status(status).body(result);
     }
 
     @PostMapping("/login")
     public ResponseEntity<Map<String, Object>> login(@RequestBody RequestLogin request) {
         Map<String, Object> map = userService.login(request);
-        HttpStatus status = (map.get("user_id").toString().isEmpty())? HttpStatus.BAD_REQUEST:HttpStatus.OK;
+        HttpStatus status = (map.get("nickname") == null)? HttpStatus.BAD_REQUEST:HttpStatus.OK;
         return ResponseEntity.status(status).body(map);
     }
 

@@ -38,12 +38,12 @@ public class MainController {
 
     @PostMapping("/leaveCh")
     public ResponseEntity<String> leaveChallenge(@RequestBody MemberDto request) {
-        return ResponseEntity.ok("ok");
+        return ResponseEntity.ok(mainService.leaveChallenges(request));
     }
 
     @GetMapping("/search")
-    public ResponseEntity<String> leaveChallenge(@RequestParam("q") String query, @RequestParam("tags") String tags) {
-        return ResponseEntity.ok("ok");
+    public ResponseEntity<List<ChallengeListDto>> searchChallenge(@RequestParam("q") String query, @RequestParam("tags") String tags) {
+        return ResponseEntity.ok(mainService.searchChallenge(query, tags));
     }
 
     @PostMapping("/myCh")
@@ -55,7 +55,7 @@ public class MainController {
     public ResponseEntity<List<ChatListDto>> selectChallenge(@RequestBody MemberDto request) {
         Map<String, Object> map = mainService.getChatList(request);
         HttpStatus status = (HttpStatus) map.get("status");
-        if (status == HttpStatus.BAD_REQUEST) {
+        if (status != HttpStatus.BAD_REQUEST) {
             List<ChatListDto> list = (List<ChatListDto>) map.get("list");
             return ResponseEntity.status(status).body(list);
         }

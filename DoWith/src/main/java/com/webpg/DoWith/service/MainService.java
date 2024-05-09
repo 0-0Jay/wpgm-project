@@ -98,4 +98,24 @@ public class MainService {
         }
         return map;
     }
+
+    public String leaveChallenges(MemberDto request) {
+        String c_id = request.getC_id();
+        String user_id = request.getUser_id();
+        MemberKey m = MemberKey.builder()
+                .c_id(c_id)
+                .user_id(user_id)
+                .build();
+        Optional<Challenge> chk = challengeRepository.checkLeader(c_id, user_id);
+        if (chk.isEmpty()) {
+            memberRepository.delete(new Member(m));
+            return "OK";
+        }
+        return "Leader Can't Leave";
+    }
+
+    public List<ChallengeListDto> searchChallenge(String query, String tags) {
+        List<ChallengeListInterface> list = challengeRepository.search("%" + query + "%", tags);
+        return list.stream().map(ChallengeListDto::toDto).collect(Collectors.toList());
+    }
 }
