@@ -5,24 +5,14 @@ function Join({setUserInfo, isOpen, onClose }) {
   const [formData, setFormData] = useState({user_id: '', passwd: '', nickname: '',});
 
   // FUNCTION
-  const idInputChange = (e) => {
-    let copy = {...formData};
-    copy.user_id = e.target.value
-    setFormData(copy);
+  const inputChange = (e) => {
+    // console.log(e.target.name, e.target.value);
+    setFormData({
+      ...formData,
+      [e.target.name] : e.target.value,
+    });
   };
-
-  const pwInputChange = (e) => {
-    let copy = {...formData};
-    copy.passwd = e.target.value
-    setFormData(copy);
-  };
-
-  const nickInputChange = (e) => {
-    let copy = {...formData};
-    copy.nickname = e.target.value
-    setFormData(copy);
-  };
-
+  
   const handleSignUp = async() => {
     console.log(formData);
     await axios.post(
@@ -56,22 +46,24 @@ function Join({setUserInfo, isOpen, onClose }) {
         <span style={closeButtonStyle} onClick={onClose}>×</span>
         <p style={{textAlign: 'center'}}>회원가입</p>
         <table style={{textAlign: 'center'}}>
-          <tr>
-            <td>아이디</td>
-            <td><input type="text" name="id" style={textBoxStyle} onChange={idInputChange}/></td>
-          </tr>
-          <tr>
-            <td>비밀번호</td>
-            <td><input type="text" name="pw" style={textBoxStyle} onChange={pwInputChange}/></td>
-          </tr>
-          <tr>
-            <td>닉네임</td>
-            <td><input type="text" name="nick" style={textBoxStyle} onChange={nickInputChange}/></td>
-          </tr>
-          <tr style={{textAlign: 'right'}}>
-            <td />
-            <td><button style={buttonStyle} onClick={handleSignUp}>회원가입</button></td>
-          </tr>
+          <tbody>
+            <tr>
+              <td>아이디</td>
+              <td><input type="text" name="user_id" style={textBoxStyle} onChange={inputChange}/></td>
+            </tr>
+            <tr>
+              <td>비밀번호</td>
+              <td><input type="text" name="passwd" style={textBoxStyle} onChange={inputChange}/></td>
+            </tr>
+            <tr>
+              <td>닉네임</td>
+              <td><input type="text" name="nickname" style={textBoxStyle} onChange={inputChange}/></td>
+            </tr>
+            <tr style={{textAlign: 'right'}}>
+              <td />
+              <td><button style={buttonStyle} onClick={handleSignUp}>회원가입</button></td>
+            </tr>
+          </tbody>
         </table>
       </div>
     </div>

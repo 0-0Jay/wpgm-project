@@ -5,17 +5,13 @@ function Login({setUserInfo, isOpen, onClose }) {
   const [formData, setFormData] = useState({user_id: '', passwd: '', });
 
   // FUNCTION
-  const idInputChange = (e) => {
-    let copy = {...formData};
-    copy.user_id = e.target.value
-    setFormData(copy);
-  };
-
-  const pwInputChange = (e) => {
-    let copy = {...formData};
-    copy.passwd = e.target.value
-    setFormData(copy);
-  };
+  const inputChange = (e) => {
+    // console.log(e.target.name, e.target.value);
+    setFormData({
+      ...formData,
+      [e.target.name] : e.target.value,
+    })
+  }
 
   const logIn = async() => {
     console.log(formData);
@@ -43,20 +39,22 @@ function Login({setUserInfo, isOpen, onClose }) {
         <span style={closeButtonStyle} onClick={onClose}>×</span>
         <p style={{textAlign: 'center'}}>로그인</p>
         <table style={{textAlign: 'center'}}>
-          <tr>
-            <td>아이디</td>
-            <td><input type="text" name="id" style={textBoxStyle} onChange={idInputChange}/></td>
-          </tr>
-          <tr>
-            <td>비밀번호</td>
-            <td><input type="text" name="pw" style={textBoxStyle} onChange={pwInputChange}/></td>
-          </tr>
-          <tr style={{textAlign: 'right'}}>
-            <td />
-            <td>
-              <button style={buttonStyle} onClick={logIn}>로그인</button>
-            </td>
-          </tr>
+          <tbody>
+            <tr>
+              <td>아이디</td>
+              <td><input type="text" name="user_id" style={textBoxStyle} onChange={inputChange}/></td>
+            </tr>
+            <tr>
+              <td>비밀번호</td>
+              <td><input type="text" name="passwd" style={textBoxStyle} onChange={inputChange}/></td>
+            </tr>
+            <tr style={{textAlign: 'right'}}>
+              <td />
+              <td>
+                <button style={buttonStyle} onClick={logIn}>로그인</button>
+              </td>
+            </tr>
+          </tbody>
         </table>
       </div>
     </div>
@@ -82,7 +80,8 @@ const modalContentStyle = {
   padding: '20px',
   fontWeight: 'bold',
   fontSize: '2vw', // vw 단위로 설정하여 웹페이지 가로에 맞춰서 크기 조절
-  borderRadius:'10%'
+  borderRadius:'10%',
+  zIndex: '-1'
 };
 
 const closeButtonStyle = {

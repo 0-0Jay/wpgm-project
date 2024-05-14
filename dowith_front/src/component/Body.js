@@ -1,14 +1,19 @@
+import React, { useState } from 'react';
+import ChallengeList from './ChallengeList';
+import CreateChallenge from './CreateChallenge';
+import MyPage from './MyPage';
+
 function Body({menu}) {
   return (
-    <body>
+    <div>
         {menu === 1 ? (
-          <p>챌린지 등록 누른 상태</p>
+          <CreateChallenge />
         ) : menu === 2 ?(
-          <p>마이페이지 누른 상태</p>
+          <MyPage />
         ) : (
-          <p>진행 중 챌린지 누른 상태</p>
+          <ChallengeList />
         )}
-    </body>
+    </div>
   );
 }
 
