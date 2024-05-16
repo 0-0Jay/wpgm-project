@@ -5,16 +5,17 @@ import Body from './component/Body';
 
 function App() {
   const [menu, setMenu] = useState(0);
+  const [isLogin, setIsLogin] = useState(false);
 
   return (
     <div style={appStyle}>
-      <Header />
+      <Header setIsLogin={setIsLogin}/>
       <div style={contentStyle}>
         <div style={menuContainerStyle}>
-          <Menu setMenu={setMenu} />
+          <Menu setMenu={setMenu} isLogin={isLogin} />
         </div>
         <div style={bodyContainerStyle}>
-          <Body menu={menu}/>
+          <Body menu={menu} isLogin={isLogin}/>
         </div>
       </div>
     </div>

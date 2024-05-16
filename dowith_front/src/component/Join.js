@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-function Join({setUserInfo, isOpen, onClose }) {
+function Join({isOpen, onClose }) {
   const [formData, setFormData] = useState({user_id: '', passwd: '', nickname: '',});
 
   // FUNCTION
@@ -22,7 +22,9 @@ function Join({setUserInfo, isOpen, onClose }) {
     .then(response => {
       console.log(response)
       alert("회원가입 되었습니다!");
-      setUserInfo({user_id:formData.user_id, nickname:formData.nickname});
+      localStorage.setItem("user_id", response.data.user_id);
+      localStorage.setItem("nickname", response.data.nickname);
+      window.location.reload();
       console.log('성공');
     })
     .catch(error => {

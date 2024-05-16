@@ -115,6 +115,7 @@ public class MainService {
     }
 
     public List<ChallengeListDto> searchChallenge(String query, String tags) {
+        System.out.println(query + " " + tags);
         List<ChallengeListInterface> list = challengeRepository.search("%" + query + "%", tags);
         return list.stream().map(ChallengeListDto::toDto).collect(Collectors.toList());
     }

@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import axios from 'axios';
 
-function Login({setUserInfo, isOpen, onClose }) {
+function Login({isOpen, onClose }) {
   const [formData, setFormData] = useState({user_id: '', passwd: '', });
 
   // FUNCTION
@@ -22,8 +22,10 @@ function Login({setUserInfo, isOpen, onClose }) {
     .then(response => {
       console.log(response)
       alert("로그인 성공.");
-      setUserInfo({user_id:formData.user_id, nickname:response.data.nickname});
-      console.log('성공');
+      localStorage.setItem("user_id", response.data.user_id);
+      localStorage.setItem("nickname", response.data.nickname);
+      window.location.reload();
+      console.log(localStorage.getItem("user"));
     })
     .catch(error => {
       alert("로그인 실패. 아이디/비밀번호를 확인해주세요.");

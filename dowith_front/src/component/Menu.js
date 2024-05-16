@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 
-function Menu({setMenu}) {
+function Menu({setMenu, isLogin}) {
     const [isChallengeClicked, setIsChallengeClicked] = useState(false);
     const [isRegisterClicked, setIsRegisterClicked] = useState(false);
     const [isMyPageClicked, setIsMyPageClicked] = useState(false);
+    const [isSearchClicked, setIsSearchClicked] = useState(false);
 
     // FUNCTION
     const handleChallengeButtonClick = () => {
@@ -11,6 +13,7 @@ function Menu({setMenu}) {
             setIsChallengeClicked(true);
             setIsRegisterClicked(false); // 다른 메뉴 클릭 해제
             setIsMyPageClicked(false);
+            setIsSearchClicked(false);
             setMenu(0);
         }
     };
@@ -20,6 +23,7 @@ function Menu({setMenu}) {
             setIsRegisterClicked(true);
             setIsChallengeClicked(false); // 다른 메뉴 클릭 해제
             setIsMyPageClicked(false)
+            setIsSearchClicked(false);
             setMenu(1);
         }
     };
@@ -29,9 +33,20 @@ function Menu({setMenu}) {
             setIsMyPageClicked(true);
             setIsRegisterClicked(false);
             setIsChallengeClicked(false); // 다른 메뉴 클릭 해제
+            setIsSearchClicked(false);
             setMenu(2);
         }
     };
+
+    const handleSearchButtonClick = () => {
+        if (!isSearchClicked) {
+            setIsMyPageClicked(false);
+            setIsRegisterClicked(false);
+            setIsChallengeClicked(false); // 다른 메뉴 클릭 해제
+            setIsSearchClicked(true);
+            setMenu(3);
+        }
+    }
     // <---------------------------------------->
 
     return (
@@ -46,12 +61,22 @@ function Menu({setMenu}) {
             </div>
             <div style={menuItemStyle}>
                 <span
+                    style={isSearchClicked ? clickedLinkStyle : linkStyle}
+                    onClick={handleSearchButtonClick}
+                >
+                    챌린지 찾기
+                </span>
+            </div>
+            {localStorage.getItem('user_id') !== null ? (
+            <div style={menuItemStyle}>
+                <span
                     style={isRegisterClicked ? clickedLinkStyle : linkStyle}
                     onClick={handleRegisterButtonClick}
                 >
                     챌린지 등록
                 </span>
-            </div>
+            </div>) : (<div />)}
+            {localStorage.getItem('user_id') !== null ? (
             <div style={menuItemStyle}>
                 <span
                     style={isMyPageClicked ? clickedLinkStyle : linkStyle}
@@ -59,7 +84,9 @@ function Menu({setMenu}) {
                 >
                     마이페이지
                 </span>
-            </div>
+            </div>) : (
+                <div />
+            )}
         </div>
     );
 }
@@ -71,7 +98,7 @@ const menuStyle = {
     alignItems: 'center',
     padding: '15px', // 전체적인 패딩 조절
     borderRight: '2px solid #1F4E79', // 우측 경계선 조절
-    height: '100vh', // 웹페이지 세로 길이
+    height: '100%', // 웹페이지 세로 길이
     color: '#1F4E79', // 글자색
     backgroundColor: '#C0E7FE', // 배경색
 };

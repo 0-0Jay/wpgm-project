@@ -1,29 +1,68 @@
 import React, { useState } from 'react';
-import styled from 'styled-components';
+import axios from 'axios';
 
 function CreateChallenge() {
+    const [formData, setFormData] = useState({
+        user_id: localStorage.getItem("user_id"),
+        title: '',
+        endtime: '',
+        comments: '',
+        tags: '',
+        limits: ''
+    });
+    // FUNCTION
+    const inputChange = (e) => {
+        setFormData({
+            ...formData,
+            [e.target.name] : e.target.value,
+        })
+    }
+
+    const makeCh = async() => {
+        await axios.post(
+            'http://localhost:8099/main/makeCh',
+            formData
+        )
+        .then(response => {
+            console.log(response);
+
+
+
+        })
+        .catch(error => {
+
+        });
+    };
+
     return (
         <div>
             <div style={containerStyle}>
                 <div style={titleStyle}>
-                    제 목 : <input type='text'></input>
+                    제 목 : <input type='text' style={titleBoxStyle} onChange={inputChange}></input>
                 </div>
                 <div style={contentStyle}>
-                    <p>
-                        목표 기한 : <input type='text'></input>
-                    </p>
-                    <p>
-                        최대 인원 : <input type='text'></input>
-                    </p>
-                    <p>
-                        챌린지 소개 / 설명
-                    </p>
-                    <p>
-                        태그<br />
-                        <InfoRadioBoxInput type="radio" id="0" name="자기계발" />
-                        <InfoRadioBoxInput type="radio" id="1" name="운동/건강" />
-                        <InfoRadioBoxInput type="radio" id="2" name="예술" />
-                    </p>
+                    <div>
+                        ● 목표 기한 : <input type='date' name='limit' style={textBoxStyle} onChange={inputChange}/> 까지
+                        <p />
+                    </div>
+                    <div>
+                        ● 최대 인원 : <input type='text' name='limit' style={textBoxStyle} onChange={inputChange}/> 명
+                        <p />
+                    </div>
+                    <div>
+                        ● 챌린지 소개 / 설명<br />
+                        <textarea name='content' style={textareaStyle}></textarea>
+                        <p />
+                    </div>
+                    <div>
+                        ● 태그　　
+                        <input type="radio" id="0" name="tags" value="자기계발" onChange={inputChange} defaultChecked />자기계발　
+                        <input type="radio" id="1" name="tags" value="건강/운동" onChange={inputChange}/>건강/운동　
+                        <input type="radio" id="2" name="tags" value="예술" onChange={inputChange}/>예술　
+                        <input type="radio" id="2" name="tags" value="제작/개발" onChange={inputChange}/>제작/개발　
+                        <input type="radio" id="2" name="tags" value="자격증" onChange={inputChange}/>자격증　
+                        <p />
+                    </div>
                     <button style={buttonStyle}>등록하기</button>
                 </div>
             </div>
@@ -64,28 +103,39 @@ const buttonStyle = {
     borderRadius: '20px', // 모서리가 둥근 사각형
     fontSize: '1.5vw', // 글자 크기는 2vw
     padding: '0.25vw 1vw', // 버튼 크기는 글자 크기에 맞춰 조정
-    margin: '0px 0px 0px 60vw',
+    width:'10vw',
+    height: '3.5vw',
+    margin: '0px 0px 0px 85%',
     border: '2px solid #1F4E79', // 테두리 설정
     cursor: 'pointer', // 커서를 포인터로 변경하여 클릭 가능하다는 표시
     fontWeight: 'bold',
 };
 
-// 라디오 버튼 공사해야됨 이거 왜 안되는지 모르겠음
-const InfoRadioBoxInput = styled.input`
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border: 0;
+const textareaStyle = {
+    borderRadius: '5px',
+    resize: 'none',
+    margin: '10px',
+    width: '95%',
+    height: '20vw',
+    border: '2px solid #1F4E79',
+    fontSize: '1.4vw',
 
-  &: checked + label {
-    background-color: #1F4E79;
-    color: #ffffff;
-  }
-`;
+}
+
+const titleBoxStyle = {
+    borderRadius : '5px',
+    width: '25vw',
+    height:'3vw',
+    border: '2px solid #1F4E79',
+    fontSize: '2vw'
+}
+
+const textBoxStyle = {
+    borderRadius : '5px',
+    width: '10vw',
+    height:'2vw',
+    border: '2px solid #1F4E79',
+    fontSize: '1.4vw'
+}
 
 export default CreateChallenge;

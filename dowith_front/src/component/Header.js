@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import Login from './Login'; // Login 컴포넌트 import
 import Join from './Join'; // Join 컴포넌트 import
 
-function Header() {
+function Header({setIsLogin}) {
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showJoinModal, setShowJoinModal] = useState(false);
   const [userInfo, setUserInfo] = useState({ user_id: '', nickname: '', })
@@ -27,10 +27,9 @@ function Header() {
 
   const logOut = () => {
     alert("로그아웃");
-    let copy = {...userInfo};
-    copy.nickname = '';
-    copy.user_id = '';
-    setUserInfo(copy);
+    window.location.reload()
+    localStorage.removeItem("user_id");
+    localStorage.removeItem("nickname");
     closeJoinModal();
     closeLoginModal();
   };
@@ -39,10 +38,10 @@ function Header() {
   return (
     <header style={headerStyle}>
       <img src={logo} alt="Logo" style={logoStyle} />
-      {userInfo.nickname ? (
+      {localStorage.getItem("user_id") !== null ? (
         <div>
           <span style={buttonStyle} onClick={logOut}>로그아웃</span>
-          <span style={buttonStyle}>{userInfo.nickname} 님</span>
+          <span style={buttonStyle}>{(localStorage.getItem("nickname"))} 님</span>
         </div>
       ) : (
         <div>
