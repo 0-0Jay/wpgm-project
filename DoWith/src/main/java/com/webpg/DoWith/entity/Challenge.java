@@ -12,7 +12,6 @@ public class Challenge {
     @Id
     @Column(name="c_id")
     private String c_id;
-    private String leader;
     private String title;
     private java.sql.Timestamp endtime;
     private String comments;

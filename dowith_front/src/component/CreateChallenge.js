@@ -1,15 +1,18 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { useCookies } from 'react-cookie';
 
 function CreateChallenge() {
+    const [cookie, setCookie, removeCookie] = useCookies();
     const [formData, setFormData] = useState({
-        user_id: localStorage.getItem("user_id"),
+        user_id: cookie.login.user_id,
         title: '',
         endtime: '',
         comments: '',
         tags: '',
         limits: ''
     });
+
     // FUNCTION
     const inputChange = (e) => {
         setFormData({
@@ -19,18 +22,18 @@ function CreateChallenge() {
     }
 
     const makeCh = async() => {
+        console.log(formData);
         await axios.post(
             'http://localhost:8099/main/makeCh',
             formData
         )
         .then(response => {
             console.log(response);
-
-
-
+            alert("챌린지를 등록하였습니다.");
+            window.location.reload();
         })
         .catch(error => {
-
+            console.log(error);
         });
     };
 
@@ -38,20 +41,20 @@ function CreateChallenge() {
         <div>
             <div style={containerStyle}>
                 <div style={titleStyle}>
-                    제 목 : <input type='text' style={titleBoxStyle} onChange={inputChange}></input>
+                    제 목 : <input type='text' name='title' style={titleBoxStyle} onChange={inputChange}></input>
                 </div>
                 <div style={contentStyle}>
                     <div>
-                        ● 목표 기한 : <input type='date' name='limit' style={textBoxStyle} onChange={inputChange}/> 까지
+                        ● 목표 기한 : <input type='date' name='endtime' style={textBoxStyle} onChange={inputChange}/> 까지
                         <p />
                     </div>
                     <div>
-                        ● 최대 인원 : <input type='text' name='limit' style={textBoxStyle} onChange={inputChange}/> 명
+                        ● 최대 인원 : <input type='text' name='limits' style={textBoxStyle} onChange={inputChange}/> 명
                         <p />
                     </div>
                     <div>
                         ● 챌린지 소개 / 설명<br />
-                        <textarea name='content' style={textareaStyle}></textarea>
+                        <textarea name='comments' style={textareaStyle} onChange={inputChange}></textarea>
                         <p />
                     </div>
                     <div>
@@ -63,7 +66,7 @@ function CreateChallenge() {
                         <input type="radio" id="2" name="tags" value="자격증" onChange={inputChange}/>자격증　
                         <p />
                     </div>
-                    <button style={buttonStyle}>등록하기</button>
+                    <button style={buttonStyle} onClick={makeCh}>등록하기</button>
                 </div>
             </div>
         </div>

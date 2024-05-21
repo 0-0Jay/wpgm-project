@@ -47,6 +47,7 @@ public class UserController {
 
     @PostMapping("/changeNick")
     public ResponseEntity<String> changeNick(@RequestBody RequestChangeNick request) {
+        System.out.println(request.getUser_id() + request.getNickname());
         String result = userService.changeNick(request);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }

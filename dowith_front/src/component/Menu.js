@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { useCookies } from 'react-cookie';
 
-function Menu({setMenu, isLogin}) {
+function Menu({setMenu}) {
     const [isChallengeClicked, setIsChallengeClicked] = useState(false);
     const [isRegisterClicked, setIsRegisterClicked] = useState(false);
     const [isMyPageClicked, setIsMyPageClicked] = useState(false);
     const [isSearchClicked, setIsSearchClicked] = useState(false);
+    const [cookie, setCookie, removeCookie] = useCookies([]);
 
     // FUNCTION
     const handleChallengeButtonClick = () => {
@@ -67,7 +69,7 @@ function Menu({setMenu, isLogin}) {
                     챌린지 찾기
                 </span>
             </div>
-            {localStorage.getItem('user_id') !== null ? (
+            {cookie.login ? (
             <div style={menuItemStyle}>
                 <span
                     style={isRegisterClicked ? clickedLinkStyle : linkStyle}
@@ -76,7 +78,7 @@ function Menu({setMenu, isLogin}) {
                     챌린지 등록
                 </span>
             </div>) : (<div />)}
-            {localStorage.getItem('user_id') !== null ? (
+            {cookie.login ? (
             <div style={menuItemStyle}>
                 <span
                     style={isMyPageClicked ? clickedLinkStyle : linkStyle}
@@ -98,7 +100,7 @@ const menuStyle = {
     alignItems: 'center',
     padding: '15px', // 전체적인 패딩 조절
     borderRight: '2px solid #1F4E79', // 우측 경계선 조절
-    height: '100%', // 웹페이지 세로 길이
+    height: '59vw', // 웹페이지 세로 길이
     color: '#1F4E79', // 글자색
     backgroundColor: '#C0E7FE', // 배경색
 };

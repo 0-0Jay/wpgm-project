@@ -1,12 +1,13 @@
 import logo from '../assets/logo.png';
 import React, { useState } from 'react';
+import { useCookies } from 'react-cookie';
 import Login from './Login'; // Login 컴포넌트 import
 import Join from './Join'; // Join 컴포넌트 import
 
-function Header({setIsLogin}) {
+function Header() {
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showJoinModal, setShowJoinModal] = useState(false);
-  const [userInfo, setUserInfo] = useState({ user_id: '', nickname: '', })
+  const [cookie, setCookie, removeCookie] = useCookies([]);
 
   // FUNCTION
   const openLoginModal = () => {
@@ -27,9 +28,8 @@ function Header({setIsLogin}) {
 
   const logOut = () => {
     alert("로그아웃");
-    window.location.reload()
-    localStorage.removeItem("user_id");
-    localStorage.removeItem("nickname");
+    removeCookie("login");
+    window.location.reload();
     closeJoinModal();
     closeLoginModal();
   };
@@ -38,10 +38,10 @@ function Header({setIsLogin}) {
   return (
     <header style={headerStyle}>
       <img src={logo} alt="Logo" style={logoStyle} />
-      {localStorage.getItem("user_id") !== null ? (
+      {cookie.login ? (
         <div>
           <span style={buttonStyle} onClick={logOut}>로그아웃</span>
-          <span style={buttonStyle}>{(localStorage.getItem("nickname"))} 님</span>
+          <span style={buttonStyle}>{cookie.login.nickname} 님</span>
         </div>
       ) : (
         <div>
@@ -49,8 +49,8 @@ function Header({setIsLogin}) {
           <span style={buttonStyle} onClick={openLoginModal}>로그인</span>
           <span style={buttonStyle} onClick={openJoinModal}>회원가입</span>
         {/* 모달 컴포넌트 렌더링 */}
-          <Login setUserInfo={setUserInfo} isOpen={showLoginModal} onClose={closeLoginModal} />
-          <Join setUserInfo={setUserInfo} isOpen={showJoinModal} onClose={closeJoinModal} />
+          <Login isOpen={showLoginModal} onClose={closeLoginModal} />
+          <Join isOpen={showJoinModal} onClose={closeJoinModal} />
         </div>
       )}
     </header>

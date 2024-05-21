@@ -1,12 +1,57 @@
 import React, { useState } from 'react';
+import axios from 'axios';
+import { useCookies } from 'react-cookie';
+import Chat from './Chat';
 
-function ChallengeCard({CardInfo}) {
+function ChallengeCard({CardInfo, menu}) {
     const endtime = CardInfo.endtime
+    const [showChatModal, setShowChatModal] = useState(false);
+    const [cookie] = useCookies([]);
+
+    const openChatModal = () => {
+        setShowChatModal(true);
+    };
+    
+    const closeChatModal = () => {
+        setShowChatModal(false);
+    };
+
+    const leaveCh = async() => {
+        await axios.post(
+            'http://localhost:8099/main/leaveCh',
+            {c_id : CardInfo.c_id, user_id: cookie.login.user_id}
+        )
+        .then(response => {
+            console.log(response);
+            alert("챌린지에서 탈퇴하였습니다.");
+            window.location.reload();
+        })
+        .catch(error => {
+            console.log(error);
+        });
+    }
+
+    const joinCh = async() => {
+        await axios.post(
+            'http://localhost:8099/main/joinCh',
+            {c_id: CardInfo.c_id, user_id: cookie.login.user_id}
+        )
+        .then(response => {
+            console.log(response);
+            openChatModal();
+        })
+        .catch(error => {
+            console.log(error);
+        });
+    }
+
     return (
         <div style={containerStyle}>
             <div style={titleStyle}>
                 {CardInfo.title}
-                <button style={buttonStyle}>참가하기</button>
+                <button style={buttonStyle} onClick={joinCh}>{menu === 1? '참가하기' : '입장하기'}</button>
+                {menu === 2? (<span style={closeButtonStyle} onClick={leaveCh}>×</span>) : null}
+                <Chat isOpen={showChatModal} onClose={closeChatModal} c_id={CardInfo.c_id} title={CardInfo.title}/>
             </div>
             <div style={contentStyle}>
                 <div>
@@ -33,7 +78,7 @@ function ChallengeCard({CardInfo}) {
 // CSS
 const containerStyle = {
     backgroundColor: '#fff',
-    padding: '15px',
+    padding: '10px',
 }
 
 const titleStyle = {
@@ -62,6 +107,14 @@ const contentStyle = {
     height: '15vw'
 }
 
+const closeButtonStyle = {
+    fontSize: '2vw',
+    cursor: 'pointer',
+    fontWeight: 'bold',
+    padding: '0px 0px 0px 1vw',
+    color: 'red'
+};
+
 const buttonStyle = {
     backgroundColor: '#C0E7FE',
     color: '#1F4E79',
@@ -84,7 +137,6 @@ const tagStyle = {
     padding: '0.25vw 1vw', // 버튼 크기는 글자 크기에 맞춰 조정
     width:'8vw',
     height: '3vw',
-    margin: '0px 0px 0px 10px',
     border: '2px solid #1F4E79', // 테두리 설정
     cursor: 'pointer', // 커서를 포인터로 변경하여 클릭 가능하다는 표시
     fontWeight: 'bold',

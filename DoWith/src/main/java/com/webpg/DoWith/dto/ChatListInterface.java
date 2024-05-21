@@ -5,6 +5,5 @@ public interface ChatListInterface {
     String getC_id();
     String getUser_id();
     String getChat();
-    String getUpper_id();
     String getNickname();
 }

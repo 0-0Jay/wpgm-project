@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -27,13 +28,21 @@ public class MainController {
     }
 
     @PostMapping("/joinCh")
-    public ResponseEntity<String> joinChallenge(@RequestBody MemberDto memberDto) {
-        return ResponseEntity.ok(mainService.joinChallenge(memberDto));
+    public String joinChallenge(@RequestBody MemberDto request) {
+        return mainService.joinChallenge(request);
+    }
+
+    @GetMapping("/chat/{c_id}")
+    public ResponseEntity<List<ChatListDto>> getChatList(@PathVariable("c_id") String c_id) {
+        Map<String, Object> map = mainService.getChatList(c_id);
+        return ResponseEntity.status(HttpStatus.OK).body((List<ChatListDto>) map.get("list"));
     }
 
     @PostMapping("/addChat")
-    public ResponseEntity<String> addChat(@RequestBody ChatDto chatDto) {
-        return ResponseEntity.ok(mainService.addChat(chatDto));
+    public ResponseEntity<List<ChatListDto>> addChat(@RequestBody ChatDto chatDto) {
+        System.out.println(chatDto.getChat());
+        Map<String, Object> map = mainService.addChat(chatDto);
+        return ResponseEntity.status(HttpStatus.OK).body((List<ChatListDto>) map.get("list"));
     }
 
     @PostMapping("/leaveCh")
@@ -49,17 +58,6 @@ public class MainController {
     @PostMapping("/myCh")
     public ResponseEntity<List<ChallengeListDto>> getMyChallenges(@RequestBody Map<String, String> request) {
         return ResponseEntity.ok(mainService.getMyChallenges(request.get("user_id")));
-    }
-
-    @PostMapping("/selectCh")
-    public ResponseEntity<List<ChatListDto>> selectChallenge(@RequestBody MemberDto request) {
-        Map<String, Object> map = mainService.getChatList(request);
-        HttpStatus status = (HttpStatus) map.get("status");
-        if (status != HttpStatus.BAD_REQUEST) {
-            List<ChatListDto> list = (List<ChatListDto>) map.get("list");
-            return ResponseEntity.status(status).body(list);
-        }
-        return ResponseEntity.status(status).body(null);
     }
 
 }

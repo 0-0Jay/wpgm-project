@@ -22,9 +22,9 @@ function ChallengeList() {
     }, []);
 
     return (
-        <div style={{display:'flex', flexWrap: 'wrap',}}>
+        <div style={{display:'flex', flexWrap: 'wrap', height: '61.5vw', overflowY: 'auto'}}>
             {cardList.map(ch => (
-                <ChallengeCard key={ch.c_id} CardInfo={ch}/>
+                <ChallengeCard key={ch.c_id} CardInfo={ch} menu={1}/>
             ))}
         </div>
     );

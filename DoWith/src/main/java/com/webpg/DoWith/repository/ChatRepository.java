@@ -22,9 +22,6 @@ public interface ChatRepository extends JpaRepository<Chat, String> {
     @Query(value = "SELECT c.*, u.nickname " +
             "FROM chat c " +
             "JOIN users u ON c.user_id = u.user_id " +
-            "WHERE c.c_id = :c_id " +
-            "START WITH c.upper_id IS NULL " +
-            "CONNECT BY PRIOR c.chat_id = c.upper_id " +
-            "ORDER SIBLINGS BY 1", nativeQuery = true)
+            "WHERE c.c_id = :c_id", nativeQuery = true)
     public List<ChatListInterface> getChatList(@Param("c_id") String c_id);
 }

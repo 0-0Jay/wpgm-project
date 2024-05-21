@@ -2,9 +2,9 @@ import React, {useState} from 'react';
 import { useCookies } from 'react-cookie';
 import axios from 'axios';
 
-function Login({isOpen, onClose}) {
-  const [formData, setFormData] = useState({user_id: '', passwd: '', });
+function NicknameChange({isOpen, onClose}) {
   const [cookie, setCookie, removeCookie] = useCookies([]);
+  const [formData, setFormData] = useState({user_id: '', nickname: '', });
 
   // FUNCTION
   const inputChange = (e) => {
@@ -15,20 +15,25 @@ function Login({isOpen, onClose}) {
     })
   }
 
-  const logIn = async() => {
+  const changeNick = async() => {
     console.log(formData);
+    setFormData({
+      ...formData,
+      ['user_id'] : cookie.login.user_id,
+    })
+
     await axios.post(
-      'http://localhost:8099/user/login',
+      'http://localhost:8099/user/changeNick',
       formData
     )
     .then(response => {
       console.log(response)
-      alert("로그인 성공.");
-      setCookie("login", response.data, {path: "/", expires: new Date(Date.now() + 3600 * 1000 * 24)});
+      alert("닉네임이 변경되었습니다.");
+      setCookie("login", formData, {path: "/", expires: new Date(Date.now() + 3600 * 1000)});
       window.location.reload();
     })
     .catch(error => {
-      alert("로그인 실패. 아이디/비밀번호를 확인해주세요.");
+      alert("변경 실패. 이미 존재하는 닉네임입니다.");
     });
   };
 
@@ -39,21 +44,17 @@ function Login({isOpen, onClose}) {
     <div style={modalStyle}>
       <div style={modalContentStyle}>
         <span style={closeButtonStyle} onClick={onClose}>×</span>
-        <p style={{textAlign: 'center'}}>로그인</p>
+        <p style={{textAlign: 'center'}}>닉네임 변경</p>
         <table style={{textAlign: 'center'}}>
           <tbody>
             <tr>
-              <td>아이디</td>
-              <td><input type="text" name="user_id" style={textBoxStyle} onChange={inputChange}/></td>
-            </tr>
-            <tr>
-              <td>비밀번호</td>
-              <td><input type="text" name="passwd" style={textBoxStyle} onChange={inputChange}/></td>
+              <td>새 닉네임</td>
+              <td><input type="text" name="nickname" style={textBoxStyle} onChange={inputChange}/></td>
             </tr>
             <tr style={{textAlign: 'right'}}>
               <td />
               <td>
-                <button style={buttonStyle} onClick={logIn}>로그인</button>
+                <button style={buttonStyle} onClick={changeNick}>변경하기</button>
               </td>
             </tr>
           </tbody>
@@ -114,4 +115,4 @@ const textBoxStyle = {
 }
 
 
-export default Login;
+export default NicknameChange;

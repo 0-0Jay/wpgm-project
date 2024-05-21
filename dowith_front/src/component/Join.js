@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
+import { useCookies } from 'react-cookie';
 import axios from 'axios';
 
 function Join({isOpen, onClose }) {
   const [formData, setFormData] = useState({user_id: '', passwd: '', nickname: '',});
+  const [cookie, setCookie, removeCookie] = useCookies(["login"]);
 
   // FUNCTION
   const inputChange = (e) => {
-    // console.log(e.target.name, e.target.value);
     setFormData({
       ...formData,
       [e.target.name] : e.target.value,
@@ -20,12 +21,10 @@ function Join({isOpen, onClose }) {
       formData
     )
     .then(response => {
-      console.log(response)
+      console.log(response);
       alert("회원가입 되었습니다!");
-      localStorage.setItem("user_id", response.data.user_id);
-      localStorage.setItem("nickname", response.data.nickname);
+      setCookie("login", formData, {path: "/", expires: new Date(Date.now() + 3600 * 1000 * 24)});
       window.location.reload();
-      console.log('성공');
     })
     .catch(error => {
       console.error('오류', error);

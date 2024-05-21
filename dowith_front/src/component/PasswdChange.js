@@ -2,33 +2,37 @@ import React, {useState} from 'react';
 import { useCookies } from 'react-cookie';
 import axios from 'axios';
 
-function Login({isOpen, onClose}) {
-  const [formData, setFormData] = useState({user_id: '', passwd: '', });
+function PasswdChange({isOpen, onClose}) {
+  const [formData, setFormData] = useState({user_id: '', passwd: '',  newpw: ''});
   const [cookie, setCookie, removeCookie] = useCookies([]);
 
   // FUNCTION
   const inputChange = (e) => {
-    // console.log(e.target.name, e.target.value);
     setFormData({
       ...formData,
       [e.target.name] : e.target.value,
     })
   }
 
-  const logIn = async() => {
+  const changePw = async() => {
+    setFormData({
+      ...formData,
+      ['user_id'] : cookie.login.user_id,
+    })
+
     console.log(formData);
     await axios.post(
-      'http://localhost:8099/user/login',
+      'http://localhost:8099/user/changePw',
       formData
     )
     .then(response => {
       console.log(response)
-      alert("로그인 성공.");
-      setCookie("login", response.data, {path: "/", expires: new Date(Date.now() + 3600 * 1000 * 24)});
+      alert("비밀번호가 변경되었습니다.");
       window.location.reload();
     })
     .catch(error => {
-      alert("로그인 실패. 아이디/비밀번호를 확인해주세요.");
+      alert("변경 실패");
+      console.log(error);
     });
   };
 
@@ -39,21 +43,21 @@ function Login({isOpen, onClose}) {
     <div style={modalStyle}>
       <div style={modalContentStyle}>
         <span style={closeButtonStyle} onClick={onClose}>×</span>
-        <p style={{textAlign: 'center'}}>로그인</p>
+        <p style={{textAlign: 'center'}}>비밀번호 변경</p>
         <table style={{textAlign: 'center'}}>
           <tbody>
-            <tr>
-              <td>아이디</td>
-              <td><input type="text" name="user_id" style={textBoxStyle} onChange={inputChange}/></td>
-            </tr>
             <tr>
               <td>비밀번호</td>
               <td><input type="text" name="passwd" style={textBoxStyle} onChange={inputChange}/></td>
             </tr>
+            <tr>
+              <td>새 비밀번호</td>
+              <td><input type="text" name="newpw" style={textBoxStyle} onChange={inputChange}/></td>
+            </tr>
             <tr style={{textAlign: 'right'}}>
               <td />
               <td>
-                <button style={buttonStyle} onClick={logIn}>로그인</button>
+                <button style={buttonStyle} onClick={changePw}>변경하기</button>
               </td>
             </tr>
           </tbody>
@@ -114,4 +118,4 @@ const textBoxStyle = {
 }
 
 
-export default Login;
+export default PasswdChange;

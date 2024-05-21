@@ -48,7 +48,7 @@ function SearchChallenge() {
             <button style={buttonStyle} onClick={chList}>검색</button>
           </div>
         </div>
-        <div style={{display:'flex', flexWrap:'wrap'}}>
+        <div style={{display:'flex', flexWrap:'wrap', height: '47vw', overflowY: 'auto'}}>
           {cardList.length > 0 ? (
             cardList.map(ch => (
               <ChallengeCard key={ch.c_id} CardInfo={ch}/>

@@ -15,15 +15,13 @@ public class ChatDto {
     private String user_id;
     private String c_id;
     private String chat;
-    private String upper_id;
 
     public static Chat toEntity(ChatDto chatDto) {
         return new Chat(
                 chatDto.getChat_id(),
                 chatDto.getUser_id(),
                 chatDto.getC_id(),
-                chatDto.getChat(),
-                chatDto.getUpper_id()
+                chatDto.getChat()
         );
     }
 
@@ -32,8 +30,7 @@ public class ChatDto {
                 chat.getChat_id(),
                 chat.getUser_id(),
                 chat.getC_id(),
-                chat.getChat(),
-                chat.getUpper_id()
+                chat.getChat()
         );
     }
 }

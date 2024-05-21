@@ -12,10 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -34,30 +31,11 @@ public class MainService {
         return myList.stream().map(ChallengeListDto::toDto).collect(Collectors.toList());
     }
 
-    public String joinChallenge(MemberDto memberDto) {
-        String c_id = memberDto.getC_id();
-        String user_id = memberDto.getUser_id();
-        Optional<Challenge> ch = challengeRepository.findById(c_id);
-        if (ch.isPresent()) {
-            Member member = new Member(
-                    MemberKey.builder()
-                            .c_id(c_id)
-                            .user_id(user_id)
-                            .build()
-            );
-            memberRepository.save(member);
-            return "OK";
-        } else {
-            return "Challenge Not Exists";
-        }
-    }
-
     public String makeChallenges(RequestMakeCh request) {
         String c_id = String.valueOf(System.currentTimeMillis());
         String user_id = request.getUser_id();
         Challenge challenge = new Challenge(
                 c_id,
-                user_id,
                 request.getTitle(),
                 request.getEndtime(),
                 request.getComments(),
@@ -75,27 +53,29 @@ public class MainService {
         return "OK";
     }
 
-    public String addChat(ChatDto chatDto) {
+    public Map<String, Object> addChat(ChatDto chatDto) {
         String chat_id = String.valueOf(System.currentTimeMillis());
         chatDto.setChat_id(chat_id);
         chatRepository.save(ChatDto.toEntity(chatDto));
-        return "OK";
+        return getChatList(chatDto.getC_id());
     }
 
-    public Map<String, Object> getChatList(MemberDto request) {
+    public String joinChallenge(MemberDto request) {
         Map<String, Object> map = new HashMap<>();
         MemberKey m = MemberKey.builder()
                 .c_id(request.getC_id())
                 .user_id(request.getUser_id())
                 .build();
-        if (memberRepository.findById(m).isPresent()) {
-            map.put("status", HttpStatus.OK);
-            List<ChatListInterface> list = chatRepository.getChatList(request.getC_id());
-            List<ChatListDto> result = list.stream().map(ChatListDto::toDto).toList();
-            map.put("list", result);
-        } else {
-            map.put("status", HttpStatus.BAD_REQUEST);
-        }
+        Member member = new Member(m);
+        memberRepository.save(member);
+        return "OK";
+    }
+
+    public Map<String, Object> getChatList(String c_id) {
+        Map<String, Object> map = new HashMap<>();
+        List<ChatListInterface> list = chatRepository.getChatList(c_id);
+        List<ChatListDto> result = list.stream().map(ChatListDto::toDto).toList();
+        map.put("list", result);
         return map;
     }
 
@@ -106,12 +86,10 @@ public class MainService {
                 .c_id(c_id)
                 .user_id(user_id)
                 .build();
-        Optional<Challenge> chk = challengeRepository.checkLeader(c_id, user_id);
-        if (chk.isEmpty()) {
-            memberRepository.delete(new Member(m));
-            return "OK";
-        }
-        return "Leader Can't Leave";
+        memberRepository.delete(new Member(m));
+        if (memberRepository.findByChallenge(c_id).isEmpty())
+            challengeRepository.deleteById(c_id);
+        return "OK";
     }
 
     public List<ChallengeListDto> searchChallenge(String query, String tags) {
