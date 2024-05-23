@@ -1,13 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useCookies } from 'react-cookie';
 import axios from 'axios';
+import Message from './Message';
 
 function Chat({isOpen, onClose, c_id, title}) {
-  const [cookie, setCookie, removeCookie] = useCookies([]);
+  const [cookie] = useCookies([]);
   const [chatList, setChatList] = useState([]);
   const [formData, setFormData] = useState({
     user_id: cookie.login.user_id, c_id: c_id, chat:''
   });
+  const chatEnd = useRef(null);
 
   // FUNCTION
   useEffect(() => {
@@ -28,6 +30,12 @@ function Chat({isOpen, onClose, c_id, title}) {
       getChatList();
     }
   }, [isOpen]);
+
+  useEffect(() => {
+    if (chatEnd.current) {
+      chatEnd.current.scrollIntoView({behavior: 'smooth'});
+    }
+  }, [chatList]);
   
   if (!isOpen) return null;
 
@@ -39,17 +47,23 @@ function Chat({isOpen, onClose, c_id, title}) {
   };
 
   const addChat = async() => {
-    await axios.post(
-      'http://localhost:8099/main/addChat',
-      formData
-    )
-    .then(response => {
-      console.log(response);
-      setChatList(response.data);
-    })
-    .catch(error => {
-      console.log("요청 실패");
-    });
+    if (formData.chat) {
+      await axios.post(
+        'http://localhost:8099/main/addChat',
+        formData
+      )
+      .then(response => {
+        console.log(response);
+        setChatList(response.data);
+        setFormData({
+          ...formData,
+          ['chat'] : ''
+        })
+      })
+      .catch(error => {
+        console.log("요청 실패");
+      });
+    }
   }
 
   const enterKey = (e) => {
@@ -57,6 +71,7 @@ function Chat({isOpen, onClose, c_id, title}) {
       addChat();
     }
   }
+
   // <---------------------------------------->
 
   return (
@@ -69,14 +84,22 @@ function Chat({isOpen, onClose, c_id, title}) {
         <div style={contentStyle}>
           <div style={chatStyle}>
             {chatList && chatList.map((it) => (
-              <div key={it.chat_id}>
-                <div>{it.nickname}</div>
-                <div>{it.chat}</div>
-              </div>  
+              <Message key={it.chat_id} chat_id={it.chat_id} nickname = {it.nickname} chat={it.chat}  />
+              // it.nickname === cookie.login.nickname? (
+              //   <div key={it.chat_id} style = {{textAlign:'right'}}>
+              //     <div style={nickStyle}>{it.nickname}</div>
+              //     <div><span>{Date(it.chat_id)}:{it.chat_id}</span><div style={myCmtStyle}>{it.chat}</div></div>
+              //   </div> ) : (
+              //   <div key={it.chat_id}>
+              //     <div style={nickStyle}>{it.nickname}</div>
+              //     <div><div style={commentStyle}>{it.chat}</div><span>{Date(it.chat_id).substring()}</span></div>
+              //   </div> 
+              // )
             ))}
+            <div ref={chatEnd} />
           </div>
           <div>
-            <input style={chatInputStyle} type='text' name='chat' onChange={inputChange} onKeyDown={enterKey} placeholder="채팅을 입력하세요..."/>
+            <input style={chatInputStyle} type='text' name='chat' onChange={inputChange} onKeyDown={enterKey} placeholder="채팅을 입력하세요..." value={formData.chat}/>
             <button style={buttonStyle} onClick={addChat}>입력</button>
           </div>
         </div>  
@@ -139,8 +162,7 @@ const contentStyle = {
   borderRadius:'0px 0px 20px 20px',
   border: '3px solid #1F4E79',
   margin: '-3px 0px 0px 0px',
-  width: '60vw',
-  height: '40vw'
+  height: '42vw'
 }
 
 const chatStyle = {
@@ -154,7 +176,9 @@ const chatInputStyle = {
   borderRadius : '5px',
   border: '3px solid #1F4E79',
   width: '51vw',
-  height:'3vw'
+  height:'3vw',
+  margin: '2vw 10px 0px 0px'
+
 }
 
 const buttonStyle = {
@@ -165,12 +189,38 @@ const buttonStyle = {
   padding: '0.25vw 1vw', // 버튼 크기는 글자 크기에 맞춰 조정
   width:'7vw',
   height: '3.6vw',
-  margin: 'px 0px 0px 10px',
+  margin: '0px 0px 0px 10px',
   border: '2px solid #1F4E79', // 테두리 설정
   cursor: 'pointer', // 커서를 포인터로 변경하여 클릭 가능하다는 표시
   fontWeight: 'bold',
   marginLeft:'auto'
 };
+
+const nickStyle = {
+  color: '#1F4E79',
+  fontSize: '1.2vw',
+  marginTop:' 10px'
+}
+
+const commentStyle = {
+  display: 'inline-block',
+  backgroundColor: '#C0E7FE',
+  padding: '0.25vw 1vw',
+  borderRadius: '20px',
+  width: 'auto',
+  wordWrap: 'break-word',
+  maxWidth: '40vw'
+}
+
+const myCmtStyle = {
+  display: 'inline-block',
+  backgroundColor: '#FFF099',
+  padding: '0.25vw 1vw',
+  borderRadius: '20px',
+  width: 'auto',
+  wordWrap: 'break-word',
+  maxWidth: '40vw'
+}
 
 
 export default Chat;

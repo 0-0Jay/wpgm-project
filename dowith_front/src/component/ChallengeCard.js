@@ -83,9 +83,9 @@ const containerStyle = {
 
 const titleStyle = {
     backgroundColor: '#EFF6FF',
-    fontSize: '2.5vw',
+    fontSize: '2vw',
     color: '#1F4E79',
-    padding: '10px 20px 25px 20px',
+    padding: '10px 20px 20px 20px',
     fontWeight: 'bold',
     borderRadius:'20px 20px 0px 0px',
     border: '3px solid #1F4E79',
@@ -122,7 +122,7 @@ const buttonStyle = {
     fontSize: '1.5vw', // 글자 크기는 2vw
     padding: '0.25vw 1vw', // 버튼 크기는 글자 크기에 맞춰 조정
     width:'10vw',
-    height: '3.5vw',
+    height: '3vw',
     margin: '0px 0px 0px 10px',
     border: '2px solid #1F4E79', // 테두리 설정
     cursor: 'pointer', // 커서를 포인터로 변경하여 클릭 가능하다는 표시

@@ -101,7 +101,7 @@ function MyPage() {
                     ) : (
                         <div style={{
                             color: '#1F4E79',
-                            fontSize: '1.2vw',
+                            fontSize: '1vw',
                             fontWeight: 'bold',
                             margin: '10% 40% 10% 40%'
                         }}>

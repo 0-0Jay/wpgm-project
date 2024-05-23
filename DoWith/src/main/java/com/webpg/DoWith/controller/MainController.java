@@ -40,7 +40,6 @@ public class MainController {
 
     @PostMapping("/addChat")
     public ResponseEntity<List<ChatListDto>> addChat(@RequestBody ChatDto chatDto) {
-        System.out.println(chatDto.getChat());
         Map<String, Object> map = mainService.addChat(chatDto);
         return ResponseEntity.status(HttpStatus.OK).body((List<ChatListDto>) map.get("list"));
     }

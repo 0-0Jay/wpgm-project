@@ -22,34 +22,46 @@ function CreateChallenge() {
     }
 
     const makeCh = async() => {
-        console.log(formData);
-        await axios.post(
-            'http://localhost:8099/main/makeCh',
-            formData
-        )
-        .then(response => {
-            console.log(response);
-            alert("챌린지를 등록하였습니다.");
-            window.location.reload();
-        })
-        .catch(error => {
-            console.log(error);
-        });
+        if (formData.title.length == 0 || formData.title.length > 20) {
+            alert('제목을 20자 이내로 입력해주세요!');
+        } else if (formData.endtime < new Date()) {
+            alert('목표 기한을 다시 설정해주세요!');
+        } else if (formData.limits > 100 || formData.limits < 1) {
+            alert('인원은 최소 1 ~ 100명으로 설정해주세요!');
+        } else if (formData.comments === '') {
+            alert('챌린지 소개/설명을 작성해주세요!');
+        } else if (formData.tags === '') {
+            alert('태그를 선택해주세요!');
+        } else {
+            console.log(formData);
+            await axios.post(
+                'http://localhost:8099/main/makeCh',
+                formData
+            )
+            .then(response => {
+                console.log(response);
+                alert("챌린지를 등록하였습니다.");
+                window.location.reload();
+            })
+            .catch(error => {
+                console.log(error);
+            });
+        }
     };
 
     return (
         <div>
             <div style={containerStyle}>
                 <div style={titleStyle}>
-                    제 목 : <input type='text' name='title' style={titleBoxStyle} onChange={inputChange}></input>
+                    제 목 : <input type='text' name='title' style={titleBoxStyle} onChange={inputChange} />
                 </div>
                 <div style={contentStyle}>
                     <div>
-                        ● 목표 기한 : <input type='date' name='endtime' style={textBoxStyle} onChange={inputChange}/> 까지
+                        ● 목표 기한 : <input type='date' name='endtime' style={textBoxStyle} onChange={inputChange} /> 까지
                         <p />
                     </div>
                     <div>
-                        ● 최대 인원 : <input type='text' name='limits' style={textBoxStyle} onChange={inputChange}/> 명
+                        ● 최대 인원 : <input type='text' name='limits' style={textBoxStyle} onChange={inputChange} /> 명
                         <p />
                     </div>
                     <div>
@@ -59,7 +71,7 @@ function CreateChallenge() {
                     </div>
                     <div>
                         ● 태그　　
-                        <input type="radio" id="0" name="tags" value="자기계발" onChange={inputChange} defaultChecked />자기계발　
+                        <input type="radio" id="0" name="tags" value="자기계발" onChange={inputChange}/>자기계발　
                         <input type="radio" id="1" name="tags" value="건강/운동" onChange={inputChange}/>건강/운동　
                         <input type="radio" id="2" name="tags" value="예술" onChange={inputChange}/>예술　
                         <input type="radio" id="2" name="tags" value="제작/개발" onChange={inputChange}/>제작/개발　

@@ -2,21 +2,27 @@ import React, {useState} from 'react';
 import Header from './component/Header';
 import Menu from './component/Menu';
 import Body from './component/Body';
+import { useCookies } from 'react-cookie';
+import Main from './component/Main';
 
 function App() {
   const [menu, setMenu] = useState(0);
+  const [cookie] = useCookies([]);
 
   return (
     <div style={appStyle}>
-      <Header />
-      <div style={contentStyle}>
-        <div style={menuContainerStyle}>
-          <Menu setMenu={setMenu} />
-        </div>
-        <div style={bodyContainerStyle}>
-          <Body menu={menu} />
-        </div>
-      </div>
+      {cookie.login.user_id ? (
+        <><Header />
+        <div style={contentStyle}>
+          <div style={menuContainerStyle}>
+            <Menu setMenu={setMenu} />
+          </div>
+          <div style={bodyContainerStyle}>
+            <Body menu={menu} />
+          </div>
+        </div></>) : (
+          <Main />
+        )}
     </div>
   );
 }
@@ -39,6 +45,5 @@ const menuContainerStyle = {
 const bodyContainerStyle = {
   width: '80%',
 };
-
 export default App;
 

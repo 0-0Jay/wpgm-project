@@ -23,9 +23,19 @@ function ChallengeList() {
 
     return (
         <div style={{display:'flex', flexWrap: 'wrap', height: '61.5vw', overflowY: 'auto'}}>
-            {cardList.map(ch => (
-                <ChallengeCard key={ch.c_id} CardInfo={ch} menu={1}/>
-            ))}
+          {cardList.length > 0 ? (
+            cardList.map(ch => (
+              <ChallengeCard key={ch.c_id} CardInfo={ch} menu={1}/>
+            ))) : (
+              <div style={{
+                color: '#1F4E79',
+                fontSize: '1vw',
+                fontWeight: 'bold',
+                margin: '10% 40% 10% 40%'
+              }}>
+                진행중인 챌린지가 없습니다.
+              </div>
+            )}
         </div>
     );
 }

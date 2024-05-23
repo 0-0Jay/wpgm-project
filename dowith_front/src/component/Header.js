@@ -1,26 +1,24 @@
 import logo from '../assets/logo.png';
 import React, { useState } from 'react';
 import { useCookies } from 'react-cookie';
-import Login from './Login'; // Login 컴포넌트 import
-import Join from './Join'; // Join 컴포넌트 import
 
 function Header() {
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showJoinModal, setShowJoinModal] = useState(false);
-  const [cookie, setCookie, removeCookie] = useCookies([]);
+  const [cookie, removeCookie] = useCookies([]);
 
   // FUNCTION
-  const openLoginModal = () => {
-    setShowLoginModal(true);
-  };
+  // const openLoginModal = () => {
+  //   setShowLoginModal(true);
+  // };
 
   const closeLoginModal = () => {
     setShowLoginModal(false);
   };
 
-  const openJoinModal = () => {
-    setShowJoinModal(true);
-  };
+  // const openJoinModal = () => {
+  //   setShowJoinModal(true);
+  // };
 
   const closeJoinModal = () => {
     setShowJoinModal(false);
@@ -45,12 +43,11 @@ function Header() {
         </div>
       ) : (
         <div>
-        {/* 버튼 클릭 시 해당 모달 열기 */}
+        {/* 버튼 클릭 시 해당 모달 열기
           <span style={buttonStyle} onClick={openLoginModal}>로그인</span>
           <span style={buttonStyle} onClick={openJoinModal}>회원가입</span>
-        {/* 모달 컴포넌트 렌더링 */}
           <Login isOpen={showLoginModal} onClose={closeLoginModal} />
-          <Join isOpen={showJoinModal} onClose={closeJoinModal} />
+          <Join isOpen={showJoinModal} onClose={closeJoinModal} /> */}
         </div>
       )}
     </header>
