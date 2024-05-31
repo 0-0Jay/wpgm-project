@@ -17,9 +17,9 @@ import java.util.Map;
 public class MainController {
     private final MainService mainService;
 
-    @GetMapping("/chList")
-    public ResponseEntity<List<ChallengeListDto>> getChallenges() {
-        return ResponseEntity.ok(mainService.getChallenges());
+    @GetMapping("/chList/{user_id}")
+    public ResponseEntity<List<ChallengeListDto>> getChallenges(@PathVariable("user_id") String user_id) {
+        return ResponseEntity.ok(mainService.getChallenges(user_id));
     }
 
     @PostMapping("/makeCh")
@@ -55,7 +55,7 @@ public class MainController {
     }
 
     @PostMapping("/myCh")
-    public ResponseEntity<List<ChallengeListDto>> getMyChallenges(@RequestBody Map<String, String> request) {
+    public ResponseEntity<List<MyChallengeListDto>> getMyChallenges(@RequestBody Map<String, String> request) {
         return ResponseEntity.ok(mainService.getMyChallenges(request.get("user_id")));
     }
 

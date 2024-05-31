@@ -16,4 +16,7 @@ public class RequestMakeCh {
     private String comments;
     private String tags;
     private int limits;
+    private String unit;
+    private int now_value;
+    private int up_value;
 }

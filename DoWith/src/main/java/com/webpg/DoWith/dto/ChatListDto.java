@@ -15,6 +15,8 @@ public class ChatListDto {
     private String user_id;
     private String chat;
     private String nickname;
+    private int now_value;
+    private int up_value;
 
     public static ChatListDto toDto(ChatListInterface chatListInterface) {
         return new ChatListDto(
@@ -22,7 +24,9 @@ public class ChatListDto {
                 chatListInterface.getC_id(),
                 chatListInterface.getUser_id(),
                 chatListInterface.getChat(),
-                chatListInterface.getNickname()
+                chatListInterface.getNickname(),
+                chatListInterface.getNow_value(),
+                chatListInterface.getUp_value()
         );
     }
 }

@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from 'react';
+import { useCookies } from 'react-cookie';
 import axios from 'axios';
 import ChallengeCard from './ChallengeCard';
 
 function ChallengeList() {
     const [cardList, setCardList] = useState([]);
+    const [cookie] = useCookies([]);
 
     useEffect(() => {
         const chList = async() => {
             await axios.get(
-              'http://localhost:8099/main/chList'
+              'http://localhost:8099/main/chList/' + cookie.login.user_id
             )
             .then(response => {
               console.log(response);

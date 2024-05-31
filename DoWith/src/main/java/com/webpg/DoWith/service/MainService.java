@@ -21,14 +21,14 @@ public class MainService {
     private final ChallengeRepository challengeRepository;
     private final ChatRepository chatRepository;
     private final MemberRepository memberRepository;
-    public List<ChallengeListDto> getChallenges() {
-        List<ChallengeListInterface> chList = challengeRepository.getChallenges();
+    public List<ChallengeListDto> getChallenges(String user_id) {
+        List<ChallengeListInterface> chList = challengeRepository.getChallenges(user_id);
         return chList.stream().map(ChallengeListDto::toDto).collect(Collectors.toList());
     }
 
-    public List<ChallengeListDto> getMyChallenges(String user_id) {
-        List<ChallengeListInterface> myList = challengeRepository.getMyChallenges(user_id);
-        return myList.stream().map(ChallengeListDto::toDto).collect(Collectors.toList());
+    public List<MyChallengeListDto> getMyChallenges(String user_id) {
+        List<MyChallengeListInterface> myList = challengeRepository.getMyChallenges(user_id);
+        return myList.stream().map(MyChallengeListDto::toDto).collect(Collectors.toList());
     }
 
     public String makeChallenges(RequestMakeCh request) {
@@ -40,13 +40,16 @@ public class MainService {
                 request.getEndtime(),
                 request.getComments(),
                 request.getTags(),
-                request.getLimits()
+                request.getLimits(),
+                request.getUnit()
         );
         Member member = new Member(
                 MemberKey.builder()
                         .user_id(user_id)
                         .c_id(c_id)
-                        .build()
+                        .build(),
+                request.getNow_value(),
+                request.getUp_value()
         );
         challengeRepository.save(challenge);
         memberRepository.save(member);
@@ -66,7 +69,7 @@ public class MainService {
                 .c_id(request.getC_id())
                 .user_id(request.getUser_id())
                 .build();
-        Member member = new Member(m);
+        Member member = new Member(m, request.getNow_value(), request.getUp_value());
         memberRepository.save(member);
         return "OK";
     }
@@ -86,7 +89,7 @@ public class MainService {
                 .c_id(c_id)
                 .user_id(user_id)
                 .build();
-        memberRepository.delete(new Member(m));
+        memberRepository.deleteById(m);
         if (memberRepository.findByChallenge(c_id).isEmpty())
             challengeRepository.deleteById(c_id);
         return "OK";

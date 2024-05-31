@@ -10,7 +10,9 @@ function CreateChallenge() {
         endtime: '',
         comments: '',
         tags: '',
-        limits: ''
+        limits: '',
+        now_value: '',
+        up_value: ''
     });
 
     // FUNCTION
@@ -32,6 +34,8 @@ function CreateChallenge() {
             alert('챌린지 소개/설명을 작성해주세요!');
         } else if (formData.tags === '') {
             alert('태그를 선택해주세요!');
+        } else if (isNaN(formData.now_value) || isNaN(formData.now_value)) {
+            alert('나의 현재/목표를 숫자로 입력해주세요!');
         } else {
             console.log(formData);
             await axios.post(
@@ -77,6 +81,12 @@ function CreateChallenge() {
                         <input type="radio" id="2" name="tags" value="제작/개발" onChange={inputChange}/>제작/개발　
                         <input type="radio" id="2" name="tags" value="자격증" onChange={inputChange}/>자격증　
                         <p />
+                    </div>
+                    <div>
+                        ● 단위 : <input type='text' name='unit' style={textBoxStyle} onChange={inputChange} /><p />
+                    </div>
+                    <div>
+                        ● 나의 현재/목표 : <input type='text' name='now_value' style={textBoxStyle} onChange={inputChange} /> 에서 <input type='text' name='up_value' style={textBoxStyle} onChange={inputChange} /> 까지
                     </div>
                     <button style={buttonStyle} onClick={makeCh}>등록하기</button>
                 </div>

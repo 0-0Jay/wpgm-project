@@ -1,5 +1,5 @@
 package com.webpg.DoWith.dto;
-public interface ChallengeListInterface {
+public interface MyChallengeListInterface {
     String getC_id();
     String getTitle();
     java.sql.Timestamp getEndtime();
@@ -8,4 +8,6 @@ public interface ChallengeListInterface {
     String getUnit();
     int getLimits();
     int getMemcnt();
+    int getNow_value();
+    int getUp_value();
 }

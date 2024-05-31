@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class ChallengeListDto {
+public class MyChallengeListDto {
     private String c_id;
     private String title;
     private java.sql.Timestamp endtime;
@@ -16,9 +16,11 @@ public class ChallengeListDto {
     private String unit;
     private int limits;
     private int memcnt;
+    private int now_value;
+    private int up_value;
 
-    public static ChallengeListDto toDto(ChallengeListInterface l) {
-        return new ChallengeListDto(
+    public static MyChallengeListDto toDto(MyChallengeListInterface l) {
+        return new MyChallengeListDto(
                 l.getC_id(),
                 l.getTitle(),
                 l.getEndtime(),
@@ -26,7 +28,9 @@ public class ChallengeListDto {
                 l.getTags(),
                 l.getUnit(),
                 l.getLimits(),
-                l.getMemcnt()
+                l.getMemcnt(),
+                l.getNow_value(),
+                l.getUp_value()
         );
 
     }

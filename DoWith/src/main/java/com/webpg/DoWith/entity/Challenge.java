@@ -17,4 +17,5 @@ public class Challenge {
     private String comments;
     private String tags;
     private int limits;
+    private String unit;
 }

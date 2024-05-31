@@ -53,7 +53,6 @@ function Chat({isOpen, onClose, c_id, title}) {
         formData
       )
       .then(response => {
-        console.log(response);
         setChatList(response.data);
         setFormData({
           ...formData,
@@ -85,16 +84,6 @@ function Chat({isOpen, onClose, c_id, title}) {
           <div style={chatStyle}>
             {chatList && chatList.map((it) => (
               <Message key={it.chat_id} chat_id={it.chat_id} nickname = {it.nickname} chat={it.chat}  />
-              // it.nickname === cookie.login.nickname? (
-              //   <div key={it.chat_id} style = {{textAlign:'right'}}>
-              //     <div style={nickStyle}>{it.nickname}</div>
-              //     <div><span>{Date(it.chat_id)}:{it.chat_id}</span><div style={myCmtStyle}>{it.chat}</div></div>
-              //   </div> ) : (
-              //   <div key={it.chat_id}>
-              //     <div style={nickStyle}>{it.nickname}</div>
-              //     <div><div style={commentStyle}>{it.chat}</div><span>{Date(it.chat_id).substring()}</span></div>
-              //   </div> 
-              // )
             ))}
             <div ref={chatEnd} />
           </div>

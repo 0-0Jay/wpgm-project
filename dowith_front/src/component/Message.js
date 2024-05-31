@@ -5,7 +5,6 @@ function Message({chat_id, nickname, chat}) {
   const date = new Date(Number(chat_id));
   const time = date.toDateString().substring(4, 10) + ' ' + date.toTimeString().substring(0, 5);
 
-  console.log(date);
   return (
     <div>
       {nickname === cookie.login.nickname? (

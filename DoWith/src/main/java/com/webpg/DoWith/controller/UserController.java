@@ -47,8 +47,19 @@ public class UserController {
 
     @PostMapping("/changeNick")
     public ResponseEntity<String> changeNick(@RequestBody RequestChangeNick request) {
-        System.out.println(request.getUser_id() + request.getNickname());
         String result = userService.changeNick(request);
+        return ResponseEntity.status(HttpStatus.OK).body(result);
+    }
+
+    @PostMapping("/updateValue")
+    public ResponseEntity<String> updateValue(@RequestBody Map<String, Object> request) {
+        System.out.println(request.toString());
+        int value = Integer.parseInt((String) request.get("now_value"));
+        String user_id = (String) request.get("user_id");
+        String c_id = (String) request.get("c_id");
+        System.out.println(value + ", " + user_id + ", " + c_id);
+
+        String result = userService.updateValue(c_id, user_id, value);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 }

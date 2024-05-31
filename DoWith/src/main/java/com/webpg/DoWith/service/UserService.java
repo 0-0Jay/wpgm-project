@@ -4,10 +4,12 @@ import com.webpg.DoWith.dto.RequestChangeNick;
 import com.webpg.DoWith.dto.RequestChangePW;
 import com.webpg.DoWith.dto.RequestLogin;
 import com.webpg.DoWith.dto.UserDto;
+import com.webpg.DoWith.entity.Member;
+import com.webpg.DoWith.entity.MemberKey;
 import com.webpg.DoWith.entity.Users;
+import com.webpg.DoWith.repository.MemberRepository;
 import com.webpg.DoWith.repository.UsersRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -18,6 +20,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserService {
     private final UsersRepository usersRepository;
+    private final MemberRepository memberRepository;
 
     public String join(UserDto userDto) {
         if (usersRepository.existsById(userDto.getUser_id())) {
@@ -64,5 +67,19 @@ public class UserService {
             usersRepository.save(user);
             return "OK";
         } else return "Already Exists Nickname";
+    }
+
+    public String updateValue(String c_id, String user_id, int value) {
+        Optional<Member> user_value = memberRepository.getValue(c_id, user_id);
+        if (user_value.isPresent() && value < user_value.get().getUp_value()) {
+            memberRepository.updateValue(c_id, user_id, value);
+            if (value > user_value.get().getNow_value()) {
+                return "Good";
+            }
+            return "OK";
+        } else {
+            memberRepository.deleteById(new MemberKey(c_id, user_id));
+            return "Success";
+        }
     }
 }

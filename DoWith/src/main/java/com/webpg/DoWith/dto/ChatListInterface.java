@@ -6,4 +6,6 @@ public interface ChatListInterface {
     String getUser_id();
     String getChat();
     String getNickname();
+    int getNow_value();
+    int getUp_value();
 }
