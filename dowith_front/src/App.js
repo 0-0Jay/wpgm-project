@@ -11,7 +11,7 @@ function App() {
 
   return (
     <div style={appStyle}>
-      {cookie.login.user_id ? (
+      {cookie.login && cookie.login.user_id ? (
         <><Header />
         <div style={contentStyle}>
           <div style={menuContainerStyle}>

@@ -5,24 +5,41 @@ function Message({chat_id, nickname, chat}) {
   const date = new Date(Number(chat_id));
   const time = date.toDateString().substring(4, 10) + ' ' + date.toTimeString().substring(0, 5);
 
+const makeMessage = () => {
+  if (nickname === cookie.login.nickname) {
+    return (
+      <div key={chat_id} style = {{textAlign:'right'}}>
+        <div style={nickStyle}>{nickname}</div>
+        <div>
+          <span style={dateStyle}>{time}</span>
+          <div style={myCmtStyle}>{chat}</div>
+        </div>
+      </div>
+    )
+  } else if (nickname === 'alert') {
+    return(
+      <div key={chat_id}>
+        <div>
+          <div style={commentStyle}>{chat}. {time}</div>
+        </div>
+      </div> 
+    )
+  } else {
+    return (
+      <div key={chat_id}>
+        <div style={nickStyle}>{nickname}</div>
+        <div>
+          <div style={commentStyle}>{chat}</div>
+          <span style={dateStyle}>{time}</span>
+        </div>
+      </div> 
+    )
+  }
+}
+
   return (
     <div>
-      {nickname === cookie.login.nickname? (
-        <div key={chat_id} style = {{textAlign:'right'}}>
-          <div style={nickStyle}>{nickname}</div>
-          <div>
-            <span style={dateStyle}>{time}</span>
-            <div style={myCmtStyle}>{chat}</div>
-          </div>
-        </div> ) : (
-        <div key={chat_id}>
-          <div style={nickStyle}>{nickname}</div>
-          <div>
-            <div style={commentStyle}>{chat}</div>
-            <span style={dateStyle}>{time}</span>
-          </div>
-        </div> 
-      )}
+      {makeMessage()}
     </div>
   )
 }

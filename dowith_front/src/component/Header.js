@@ -7,18 +7,9 @@ function Header() {
   const [showJoinModal, setShowJoinModal] = useState(false);
   const [cookie, removeCookie] = useCookies([]);
 
-  // FUNCTION
-  // const openLoginModal = () => {
-  //   setShowLoginModal(true);
-  // };
-
   const closeLoginModal = () => {
     setShowLoginModal(false);
   };
-
-  // const openJoinModal = () => {
-  //   setShowJoinModal(true);
-  // };
 
   const closeJoinModal = () => {
     setShowJoinModal(false);
@@ -36,20 +27,10 @@ function Header() {
   return (
     <header style={headerStyle}>
       <img src={logo} alt="Logo" style={logoStyle} />
-      {cookie.login ? (
         <div>
           <span style={buttonStyle} onClick={logOut}>로그아웃</span>
           <span style={buttonStyle}>{cookie.login.nickname} 님</span>
         </div>
-      ) : (
-        <div>
-        {/* 버튼 클릭 시 해당 모달 열기
-          <span style={buttonStyle} onClick={openLoginModal}>로그인</span>
-          <span style={buttonStyle} onClick={openJoinModal}>회원가입</span>
-          <Login isOpen={showLoginModal} onClose={closeLoginModal} />
-          <Join isOpen={showJoinModal} onClose={closeJoinModal} /> */}
-        </div>
-      )}
     </header>
   );
 }

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import ChallengeList from './ChallengeList';
 import CreateChallenge from './CreateChallenge';
 import SearchChallenge from './SearchChallenge';

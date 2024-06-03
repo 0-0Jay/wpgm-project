@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useCookies } from 'react-cookie';
 
 function CreateChallenge() {
-    const [cookie, setCookie, removeCookie] = useCookies();
+    const [cookie] = useCookies();
     const [formData, setFormData] = useState({
         user_id: cookie.login.user_id,
         title: '',
@@ -24,7 +24,7 @@ function CreateChallenge() {
     }
 
     const makeCh = async() => {
-        if (formData.title.length == 0 || formData.title.length > 20) {
+        if (formData.title.length === 0 || formData.title.length > 20) {
             alert('제목을 20자 이내로 입력해주세요!');
         } else if (formData.endtime < new Date()) {
             alert('목표 기한을 다시 설정해주세요!');

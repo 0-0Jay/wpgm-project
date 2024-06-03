@@ -60,7 +60,7 @@ function Chat({isOpen, onClose, c_id, title}) {
         })
       })
       .catch(error => {
-        console.log("요청 실패");
+        console.log("요청 실패" + error);
       });
     }
   }

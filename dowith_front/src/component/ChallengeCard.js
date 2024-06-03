@@ -6,9 +6,6 @@ import Chat from './Chat';
 function ChallengeCard({CardInfo, menu}) {
     const endtime = CardInfo.endtime
     const [showChatModal, setShowChatModal] = useState(false);
-    const [formData, setFormData] = useState({
-        user_id: 'alert', c_id: CardInfo.c_id, chat: ''
-    });
     const [cookie] = useCookies([]);
 
     const openChatModal = () => {
@@ -74,13 +71,12 @@ function ChallengeCard({CardInfo, menu}) {
             {c_id: CardInfo.c_id, user_id: cookie.login.user_id, now_value: now_value}
         )
         .then(response => {
+            CardInfo.now_value = now_value;
             console.log(response);
             if (response.data === "OK") {
                 alert("갱신 되었습니다!");
             } else if (response.data === 'Good') {
                 alert("갱신 되었습니다!");
-                now_value = 
-                addAlert(now_value);
             } else {
                 alert("목표를 달성하였습니다!");
             }
@@ -89,24 +85,6 @@ function ChallengeCard({CardInfo, menu}) {
             console.log(error);
         });
     }
-
-    const addAlert = async(now_value) => {
-        setFormData({
-            ...formData,
-            ['chat'] : `${cookie.login.nickname}님이 ${now_value}${CardInfo.unit}으로 목표에 한걸음 다가갔습니다. 축하해주세요!`
-        })
-        console.log(formData);
-        await axios.post(
-        'http://localhost:8099/main/addChat',
-        formData
-        )
-        .then(response => {
-
-        })
-        .catch(error => {
-        console.log("요청 실패");
-        });
-      }
 
     return (
         <div style={containerStyle}>
