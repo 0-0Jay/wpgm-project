@@ -1,9 +1,6 @@
 package com.webpg.DoWith.controller;
 
-import com.webpg.DoWith.dto.RequestChangeNick;
-import com.webpg.DoWith.dto.RequestChangePW;
-import com.webpg.DoWith.dto.RequestLogin;
-import com.webpg.DoWith.dto.UserDto;
+import com.webpg.DoWith.dto.*;
 import com.webpg.DoWith.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -52,14 +49,9 @@ public class UserController {
     }
 
     @PostMapping("/updateValue")
-    public ResponseEntity<String> updateValue(@RequestBody Map<String, Object> request) {
-        System.out.println(request.toString());
-        int value = Integer.parseInt((String) request.get("now_value"));
-        String user_id = (String) request.get("user_id");
-        String c_id = (String) request.get("c_id");
-        System.out.println(value + ", " + user_id + ", " + c_id);
-
-        String result = userService.updateValue(c_id, user_id, value);
+    public ResponseEntity<String> updateValue(@RequestBody RequestUpdateValue request) {
+        System.out.println(request.getNow_value() + ", " + request.getUp_value() + ", " + request.getUser_id() + ", " + request.getC_id());
+        String result = userService.updateValue(request);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 }

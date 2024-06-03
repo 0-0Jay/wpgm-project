@@ -1,9 +1,6 @@
 package com.webpg.DoWith.service;
 
-import com.webpg.DoWith.dto.RequestChangeNick;
-import com.webpg.DoWith.dto.RequestChangePW;
-import com.webpg.DoWith.dto.RequestLogin;
-import com.webpg.DoWith.dto.UserDto;
+import com.webpg.DoWith.dto.*;
 import com.webpg.DoWith.entity.Member;
 import com.webpg.DoWith.entity.MemberKey;
 import com.webpg.DoWith.entity.Users;
@@ -69,11 +66,16 @@ public class UserService {
         } else return "Already Exists Nickname";
     }
 
-    public String updateValue(String c_id, String user_id, int value) {
-        Optional<Member> user_value = memberRepository.getValue(c_id, user_id);
-        if (user_value.isPresent() && value < user_value.get().getUp_value()) {
-            memberRepository.updateValue(c_id, user_id, value);
-            if (value > user_value.get().getNow_value()) {
+    public String updateValue(RequestUpdateValue request) {
+        String c_id = request.getC_id();
+        String user_id = request.getUser_id();
+        int now_value = request.getNow_value();
+        Member user_value = memberRepository.getValue(request.getC_id(), request.getUser_id()).orElseThrow();
+        int up_value = user_value.getUp_value();
+        if (now_value < up_value) {
+            memberRepository.updateValue(c_id, user_id, now_value);
+            if (now_value > user_value.getNow_value()) {
+                
                 return "Good";
             }
             return "OK";
