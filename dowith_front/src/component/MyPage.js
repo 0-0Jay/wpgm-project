@@ -75,12 +75,12 @@ function MyPage() {
                 </div>
                 <div style={contentStyle}>
                     <div>
-                        ● 닉네임 : <input type='text' name='limit' style={textBoxStyle} readOnly></input>
+                        ● 닉네임 : <input type='text' name='limit' style={textBoxStyle} value={cookie.login.nickname} readOnly></input>
                         <button style={buttonStyle} onClick={openNickModal}>닉네임 변경</button>
                         <p />
                     </div>
                     <div>
-                        ● 아이디 : <input type='text' name='limit' style={textBoxStyle} readOnly></input>
+                        ● 아이디 : <input type='text' name='limit' style={textBoxStyle} value={cookie.login.user_id} readOnly></input>
                         <button style={buttonStyle} onClick={openPwModal}>비밀번호 변경</button>
                         <p />
                     </div>

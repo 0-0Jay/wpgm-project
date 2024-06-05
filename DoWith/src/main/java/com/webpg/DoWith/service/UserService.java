@@ -1,9 +1,11 @@
 package com.webpg.DoWith.service;
 
 import com.webpg.DoWith.dto.*;
+import com.webpg.DoWith.entity.Chat;
 import com.webpg.DoWith.entity.Member;
 import com.webpg.DoWith.entity.MemberKey;
 import com.webpg.DoWith.entity.Users;
+import com.webpg.DoWith.repository.ChatRepository;
 import com.webpg.DoWith.repository.MemberRepository;
 import com.webpg.DoWith.repository.UsersRepository;
 import lombok.RequiredArgsConstructor;
@@ -13,11 +15,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+import static java.lang.Math.abs;
+
 @Service
 @RequiredArgsConstructor
 public class UserService {
     private final UsersRepository usersRepository;
     private final MemberRepository memberRepository;
+    private final MainService mainService;
 
     public String join(UserDto userDto) {
         if (usersRepository.existsById(userDto.getUser_id())) {
@@ -69,18 +74,21 @@ public class UserService {
     public String updateValue(RequestUpdateValue request) {
         String c_id = request.getC_id();
         String user_id = request.getUser_id();
-        int now_value = request.getNow_value();
         Member user_value = memberRepository.getValue(request.getC_id(), request.getUser_id()).orElseThrow();
-        int up_value = user_value.getUp_value();
-        if (now_value < up_value) {
-            memberRepository.updateValue(c_id, user_id, now_value);
-            if (now_value > user_value.getNow_value()) {
-                
+        int diff = abs(user_value.getUp_value() - request.getNow_value());
+        int bef_diff = abs(user_value.getUp_value() - user_value.getNow_value());
+        memberRepository.updateValue(c_id, user_id, request.getNow_value());
+        if (diff > 0) {
+            if (diff < bef_diff) {
+                String alert = request.getNickname() + "님께서 " +
+                        (bef_diff - diff) + request.getUnit() + "만큼 목표에 가까워졌습니다!";
+                mainService.addChat(new ChatDto("", "alert", request.getC_id(), alert));
                 return "Good";
             }
             return "OK";
         } else {
-            memberRepository.deleteById(new MemberKey(c_id, user_id));
+            String alert = request.getNickname() + "님께서 목표를 달성하셨습니다!";
+            mainService.addChat(new ChatDto("", "alert", request.getC_id(), alert));
             return "Success";
         }
     }

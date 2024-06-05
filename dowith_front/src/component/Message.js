@@ -17,10 +17,12 @@ const makeMessage = () => {
       </div>
     )
   } else if (nickname === 'alert') {
+    console.log('alert');
     return(
       <div key={chat_id}>
-        <div>
-          <div style={commentStyle}>{chat}. {time}</div>
+        <div style={{textAlign:'center'}}>
+          <div style={dateStyle}>{time}</div>
+          <div style={alertStyle}>{chat}</div>
         </div>
       </div> 
     )
@@ -53,6 +55,17 @@ const nickStyle = {
 const commentStyle = {
   display: 'inline-block',
   backgroundColor: '#C0E7FE',
+  padding: '0.25vw 1vw',
+  borderRadius: '20px',
+  width: 'auto',
+  wordWrap: 'break-word',
+  maxWidth: '40vw'
+}
+
+const alertStyle = {
+  display: 'inline-block',
+  backgroundColor: '#D0FC5C',
+  fontSize: '1wv',
   padding: '0.25vw 1vw',
   borderRadius: '20px',
   width: 'auto',

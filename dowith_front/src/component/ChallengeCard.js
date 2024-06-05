@@ -6,6 +6,7 @@ import Chat from './Chat';
 function ChallengeCard({CardInfo, menu}) {
     const endtime = CardInfo.endtime
     const [showChatModal, setShowChatModal] = useState(false);
+    const [nowval, setNowval] = useState(CardInfo.now_value)
     const [cookie] = useCookies([]);
 
     const openChatModal = () => {
@@ -35,31 +36,31 @@ function ChallengeCard({CardInfo, menu}) {
         console.log(CardInfo);
         let now_value = null;
         let up_value = null;
-        let flag = false;
         if (menu == 1) {
             now_value = prompt("현재 진행도를 입력해주세요. 단위 : " + CardInfo.unit, '');
             if (now_value == null) return
             while (1) {
-                up_value = prompt("목표를 현재보다 높게 입력해주세요.", "");
+                up_value = prompt("목표를 입력해주세요.", "");
                 if (parseInt(up_value) > parseInt(now_value)) {
-                    flag = 1
                     break
                 } else if (up_value == null) {
                     return
                 }
             }
-        }
-        await axios.post(
-            'http://localhost:8099/main/joinCh',
-            {c_id: CardInfo.c_id, user_id: cookie.login.user_id, now_value: now_value, up_value: up_value}
-        )
-        .then(response => {
-            console.log(response);
+            await axios.post(
+                'http://localhost:8099/main/joinCh',
+                {c_id: CardInfo.c_id, user_id: cookie.login.user_id, now_value: now_value, up_value: up_value}
+            )
+            .then(response => {
+                console.log(response);
+                openChatModal();
+            })
+            .catch(error => {
+                console.log(error);
+            });
+        } else {
             openChatModal();
-        })
-        .catch(error => {
-            console.log(error);
-        });
+        }
     }
 
     const updateValue = async() => {
@@ -68,10 +69,10 @@ function ChallengeCard({CardInfo, menu}) {
         console.log(CardInfo.c_id, cookie.login.user_id, now_value);
         await axios.post(
             'http://localhost:8099/user/updateValue',
-            {c_id: CardInfo.c_id, user_id: cookie.login.user_id, now_value: now_value}
+            {c_id: CardInfo.c_id, user_id: cookie.login.user_id, nickname: cookie.login.nickname, now_value: now_value, unit: CardInfo.unit}
         )
         .then(response => {
-            CardInfo.now_value = now_value;
+            setNowval(now_value);
             console.log(response);
             if (response.data === "OK") {
                 alert("갱신 되었습니다!");
@@ -111,8 +112,8 @@ function ChallengeCard({CardInfo, menu}) {
                 </div>
                 {menu === 2? (
                 <div>
-                    현재 : <input type='text' name='now_value' style={textBoxStyle} value={CardInfo.now_value} readOnly /><button style={updateStyle} onClick={updateValue}>갱신</button>
-                    목표 : {CardInfo.up_value}
+                    현재 : <input type='text' name='now_value' style={textBoxStyle} value={nowval} readOnly />{CardInfo.unit}<button style={updateStyle} onClick={updateValue}>갱신</button>
+                    목표 : {CardInfo.up_value} {CardInfo.unit}
                 </div>
                 ) : null}
                 <div>
@@ -195,7 +196,7 @@ const tagStyle = {
 
 const textBoxStyle = {
     borderRadius : '5px',
-    width: '7vw',
+    width: '4vw',
     height:'2vw',
     border: '2px solid #1F4E79',
     fontSize: '1.4vw'

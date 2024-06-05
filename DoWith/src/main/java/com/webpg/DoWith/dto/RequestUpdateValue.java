@@ -12,6 +12,7 @@ import lombok.Setter;
 public class RequestUpdateValue {
     private String user_id;
     private String c_id;
+    private String nickname;
     private int now_value;
-    private int up_value;
+    private String unit;
 }

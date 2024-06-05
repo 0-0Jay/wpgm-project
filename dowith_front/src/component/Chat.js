@@ -29,7 +29,7 @@ function Chat({isOpen, onClose, c_id, title}) {
       };
       getChatList();
     }
-  }, [isOpen]);
+  }, [c_id, isOpen]);
 
   useEffect(() => {
     if (chatEnd.current) {
@@ -48,6 +48,7 @@ function Chat({isOpen, onClose, c_id, title}) {
 
   const addChat = async() => {
     if (formData.chat) {
+      console.log("addChat 호출됨");
       await axios.post(
         'http://localhost:8099/main/addChat',
         formData
@@ -56,7 +57,7 @@ function Chat({isOpen, onClose, c_id, title}) {
         setChatList(response.data);
         setFormData({
           ...formData,
-          ['chat'] : ''
+          chat: ''
         })
       })
       .catch(error => {
@@ -184,32 +185,5 @@ const buttonStyle = {
   fontWeight: 'bold',
   marginLeft:'auto'
 };
-
-const nickStyle = {
-  color: '#1F4E79',
-  fontSize: '1.2vw',
-  marginTop:' 10px'
-}
-
-const commentStyle = {
-  display: 'inline-block',
-  backgroundColor: '#C0E7FE',
-  padding: '0.25vw 1vw',
-  borderRadius: '20px',
-  width: 'auto',
-  wordWrap: 'break-word',
-  maxWidth: '40vw'
-}
-
-const myCmtStyle = {
-  display: 'inline-block',
-  backgroundColor: '#FFF099',
-  padding: '0.25vw 1vw',
-  borderRadius: '20px',
-  width: 'auto',
-  wordWrap: 'break-word',
-  maxWidth: '40vw'
-}
-
 
 export default Chat;

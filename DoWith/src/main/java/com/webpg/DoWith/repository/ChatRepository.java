@@ -13,17 +13,16 @@ import java.util.List;
 
 @Repository
 public interface ChatRepository extends JpaRepository<Chat, String> {
-    @Transactional
-    @Modifying
-    @Query(value="INSERT INTO chat(chat_id, c_id, user_id, chat) " +
-                 "VALUES(TO_CHAR(SYSDATE, 'YYMMDDHH24MISS'), :c_id, :user_id, :chat)",nativeQuery=true)
-    public void addChat(@Param("c_id") String c_id, @Param("user_id") String user_id, @Param("chat") String chat);
-
-    @Query(value = "SELECT DISTINCT c.*, u.nickname, m.now_value, m.up_value " +
+    @Query(value = "SELECT c.chat_id, c.c_id, c.user_id, c.chat, u.nickname, m.now_value, m.up_value " +
+            "FROM chat c " +
+            "JOIN member m on m.c_id = c.c_id " +
+            "JOIN users u ON u.user_id = c.user_id AND c.user_id = m.user_id " +
+            "WHERE c.c_id = :c_id " +
+            "UNION " +
+            "SELECT c.chat_id, c.c_id, c.user_id, c.chat, u.nickname, 0 AS now_value, 0 AS up_value " +
             "FROM chat c " +
             "JOIN users u ON c.user_id = u.user_id " +
-            "JOIN member m ON c.user_id = m.user_id " +
-            "WHERE c.c_id = :c_id " +
+            "WHERE c.user_id = 'alert' AND c_id = :c_id " +
             "ORDER BY chat_id", nativeQuery = true)
     public List<ChatListInterface> getChatList(@Param("c_id") String c_id);
 }

@@ -50,7 +50,7 @@ public class UserController {
 
     @PostMapping("/updateValue")
     public ResponseEntity<String> updateValue(@RequestBody RequestUpdateValue request) {
-        System.out.println(request.getNow_value() + ", " + request.getUp_value() + ", " + request.getUser_id() + ", " + request.getC_id());
+        System.out.println(request.getNow_value() + ", "  + request.getUser_id() + ", " + request.getC_id());
         String result = userService.updateValue(request);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
